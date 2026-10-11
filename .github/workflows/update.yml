@@ -1,0 +1,45 @@
+name: Update
+on:
+  schedule:
+    - cron: '23 6 * * *'
+  workflow_dispatch:
+concurrency:
+  group: update-formula
+  cancel-in-progress: false
+permissions:
+  contents: read
+jobs:
+  update:
+    runs-on: macos-15
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      HOMEBREW_NO_AUTO_UPDATE: '1'
+      HOMEBREW_NO_INSTALL_CLEANUP: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Verify the latest stable release
+        id: formula
+        run: |
+          scripts/update-formula.sh
+          if ! git diff --quiet -- Formula/guidedog.rb; then
+            echo 'changed=true' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Install and build HTML and PDF before updating the tap
+        if: steps.formula.outputs.changed == 'true'
+        run: |
+          brew tap-new --no-git guidedog/qualification
+          cp Formula/guidedog.rb "$(brew --repository guidedog/qualification)/Formula/guidedog.rb"
+          brew install --formula guidedog/qualification/guidedog
+          brew test guidedog/qualification/guidedog
+      - name: Commit the tested formula
+        if: steps.formula.outputs.changed == 'true'
+        run: |
+          version=$(sed -n 's/^  version "\([0-9.]*\)"$/\1/p' Formula/guidedog.rb)
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add Formula/guidedog.rb
+          git commit -m "Update Guidedog to $version."
+          git push origin HEAD:main

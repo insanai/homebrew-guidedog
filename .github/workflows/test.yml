@@ -1,0 +1,29 @@
+name: Test
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  install:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [macos-15, macos-15-intel]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: '1'
+      HOMEBREW_NO_INSTALL_CLEANUP: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install and build HTML and PDF
+        run: |
+          brew tap-new --no-git guidedog/qualification
+          cp Formula/guidedog.rb "$(brew --repository guidedog/qualification)/Formula/guidedog.rb"
+          brew install --formula guidedog/qualification/guidedog
+          brew test guidedog/qualification/guidedog
