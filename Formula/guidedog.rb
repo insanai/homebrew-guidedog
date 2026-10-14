@@ -3,28 +3,28 @@
 class Guidedog < Formula
   desc "Builds HTML documentation sites and PDF books from reStructuredText and Markdown"
   homepage "https://github.com/insanai/guidedog"
-  version "0.6.2"
+  version "0.6.3"
   license "AGPL-3.0-or-later"
 
   on_macos do
     on_arm do
-      url "https://github.com/insanai/guidedog/releases/download/v0.6.2/guidedog-macos-arm64.tar.gz"
-      sha256 "933e9067e755c13f91aab31e5b3da88066b3a6893d9d51abf6503b39ff322725"
+      url "https://github.com/insanai/guidedog/releases/download/v0.6.3/guidedog-macos-arm64.tar.gz"
+      sha256 "d7dddca37d4c94bfdb97dfe30562581d930d9e6d48dd772e9e85ce89c3815dae"
     end
     on_intel do
-      url "https://github.com/insanai/guidedog/releases/download/v0.6.2/guidedog-macos-amd64.tar.gz"
-      sha256 "9279e88bca42814cf8df050e023cc3e2c28a6812f8178c69b3b8a796d24ec2ea"
+      url "https://github.com/insanai/guidedog/releases/download/v0.6.3/guidedog-macos-amd64.tar.gz"
+      sha256 "b7299da59fe166840559f3a127e8bde999ae0bb41bcc6794a3f74334bc66ed9e"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/insanai/guidedog/releases/download/v0.6.2/guidedog-linux-arm64.tar.gz"
-      sha256 "32d557d253d206a646005c5456fe25e4a1e517eadc17e3675f2ea212d4c81ea9"
+      url "https://github.com/insanai/guidedog/releases/download/v0.6.3/guidedog-linux-arm64.tar.gz"
+      sha256 "e3d130bb626ba6cc05e253caa5c5c0884f2d3e08763d70a45925366e40107083"
     end
     on_intel do
-      url "https://github.com/insanai/guidedog/releases/download/v0.6.2/guidedog-linux-amd64.tar.gz"
-      sha256 "1e8b9a16d9749d98efdd16d487f06e866542d5d51624f109ee9c9e527443b619"
+      url "https://github.com/insanai/guidedog/releases/download/v0.6.3/guidedog-linux-amd64.tar.gz"
+      sha256 "35eca388ac7a4061076bfa688102127acdb2f1db30e183c8a5b8002362e359d0"
     end
   end
 
