@@ -49,5 +49,4 @@ It never changes or uploads upstream release assets.
 
 Documentation: <https://insanai.github.io/guidedog/>
 
-The new Rust project is `insanai/guidedog`; the earlier project is now named `insanai/guidedog_odin`.
 Scheduled updates include `v1.0.0-beta.1` and later beta versions, then follow the stable release when its version is greater.
