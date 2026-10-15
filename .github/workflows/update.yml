@@ -1,8 +1,13 @@
 name: Update
 on:
   schedule:
-    - cron: '23 6 * * *'
+    - cron: '23 * * * *'
   workflow_dispatch:
+    inputs:
+      tag:
+        description: Explicit release tag (empty follows newest version, including beta versions)
+        required: false
+        type: string
 concurrency:
   group: update-formula
   cancel-in-progress: false
@@ -12,18 +17,21 @@ jobs:
   update:
     runs-on: macos-15
     timeout-minutes: 15
-    permissions:
-      contents: write
+    outputs:
+      changed: ${{ steps.formula.outputs.changed }}
     env:
       GH_TOKEN: ${{ github.token }}
       HOMEBREW_NO_AUTO_UPDATE: '1'
       HOMEBREW_NO_INSTALL_CLEANUP: '1'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Verify the latest stable release
+      - name: Verify the selected release
         id: formula
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
         run: |
-          scripts/update-formula.sh
+          if [ -n "$RELEASE_TAG" ]; then scripts/update-formula.sh "$RELEASE_TAG"
+          else scripts/update-formula.sh; fi
           if ! git diff --quiet -- Formula/guidedog.rb; then
             echo 'changed=true' >> "$GITHUB_OUTPUT"
           fi
@@ -34,10 +42,52 @@ jobs:
           cp Formula/guidedog.rb "$(brew --repository guidedog/qualification)/Formula/guidedog.rb"
           brew install --formula guidedog/qualification/guidedog
           brew test guidedog/qualification/guidedog
-      - name: Commit the tested formula
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: steps.formula.outputs.changed == 'true'
+        with:
+          name: verified-formula
+          path: Formula/guidedog.rb
+          if-no-files-found: error
+
+  intel:
+    needs: update
+    if: needs.update.outputs.changed == 'true'
+    runs-on: macos-15-intel
+    timeout-minutes: 15
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: '1'
+      HOMEBREW_NO_INSTALL_CLEANUP: '1'
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: verified-formula
+          path: candidate
+      - name: Install and build HTML and PDF on Intel
         run: |
-          version=$(sed -n 's/^  version "\([0-9.]*\)"$/\1/p' Formula/guidedog.rb)
+          brew tap-new --no-git guidedog/qualification
+          cp candidate/guidedog.rb "$(brew --repository guidedog/qualification)/Formula/guidedog.rb"
+          brew install --formula guidedog/qualification/guidedog
+          brew test guidedog/qualification/guidedog
+
+  commit:
+    needs: [update, intel]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: verified-formula
+          path: candidate
+      - name: Commit the formula tested on both macOS architectures
+        run: |
+          cp candidate/guidedog.rb Formula/guidedog.rb
+          if git diff --quiet -- Formula/guidedog.rb; then exit 0; fi
+          version=$(sed -n 's/^  version "\([^"]*\)"$/\1/p' Formula/guidedog.rb)
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add Formula/guidedog.rb
