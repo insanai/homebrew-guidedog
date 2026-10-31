@@ -11,22 +11,22 @@ class Guidedog < Formula
   on_macos do
     on_arm do
       url "https://github.com/insanai/guidedog/releases/download/v1.0.0-beta.8/guidedog-macos-arm64.tar.gz"
-      sha256 "47ece844faad17a67369036e5e59ecf06d14f8dcdd30b54c9ba835e7629bf3c3"
+      sha256 "e1a72845305ebc9329c5beabfd30f7360769cb6fbe073bd3250d41d29af63680"
     end
     on_intel do
       url "https://github.com/insanai/guidedog/releases/download/v1.0.0-beta.8/guidedog-macos-amd64.tar.gz"
-      sha256 "0508981c8030710fa47258697590631a29a257b90ca10c063e12594190e6b056"
+      sha256 "56bf8220fee2b1c5541a4b8434afe57c9e0d8e5b55e3d3c60d6e22cd66e1a67a"
     end
   end
 
   on_linux do
     on_arm do
       url "https://github.com/insanai/guidedog/releases/download/v1.0.0-beta.8/guidedog-linux-arm64.tar.gz"
-      sha256 "2a0f2161ce11843b11265893b013b511abda7a87efe817ea69f87aa42f78ba00"
+      sha256 "db9b5e77f71ed614d3ec8a813f9a9a372b4da3d744f2cf0bfa497bcd474d8e2f"
     end
     on_intel do
       url "https://github.com/insanai/guidedog/releases/download/v1.0.0-beta.8/guidedog-linux-amd64.tar.gz"
-      sha256 "0ca5f11cc62c5ac199e470f032f425d52e6f45393b7d21a6998094e23958ded7"
+      sha256 "7d4f6931ca95729877352fc10b33aa903cabcd3cae92459d8b980fe815d9751f"
     end
   end
 
