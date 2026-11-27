@@ -3,30 +3,30 @@
 class Guidedog < Formula
   desc "Builds HTML documentation sites and PDF books from reStructuredText and Markdown"
   homepage "https://github.com/insanai/guidedog"
-  version "1.0.0-beta.15"
+  version "1.0.0-beta.16"
   license "LGPL-3.0-or-later"
 
   # Graphviz is linked statically into the programs, so there are no dependencies.
 
   on_macos do
     on_arm do
-      url "https://github.com/insanai/guidedog/releases/download/v1.0.0-beta.15/guidedog-macos-arm64.tar.gz"
-      sha256 "ead82ce0a302633cef1e4a73999b8affc8b16ba5051277e2efbb470aebe15a0c"
+      url "https://github.com/insanai/guidedog/releases/download/v1.0.0-beta.16/guidedog-macos-arm64.tar.gz"
+      sha256 "ab0cf7a1107738588feec2d96fd8d0d656da36d4187a18f0f7701f79a67fa9ca"
     end
     on_intel do
-      url "https://github.com/insanai/guidedog/releases/download/v1.0.0-beta.15/guidedog-macos-amd64.tar.gz"
-      sha256 "729a467939c2f3fb41f1f388cfef7354bc6f113a1ef3b10e6ab27f0a49d97444"
+      url "https://github.com/insanai/guidedog/releases/download/v1.0.0-beta.16/guidedog-macos-amd64.tar.gz"
+      sha256 "9ef44a80f2c95ad39d046c7e857d51bb04ab3f3c1854bfc6d96a5bada061ba13"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/insanai/guidedog/releases/download/v1.0.0-beta.15/guidedog-linux-arm64.tar.gz"
-      sha256 "f726a4005dd9e62ff443070753f26ae65fa258eb708afd3a9f86aa61725faba8"
+      url "https://github.com/insanai/guidedog/releases/download/v1.0.0-beta.16/guidedog-linux-arm64.tar.gz"
+      sha256 "33bf708660f5119245879bd6120f0fd05b0d23a0799f7475512a58c27fed64b2"
     end
     on_intel do
-      url "https://github.com/insanai/guidedog/releases/download/v1.0.0-beta.15/guidedog-linux-amd64.tar.gz"
-      sha256 "c8d2eb5e7a5b7ad9c3aee7678036296fe28f0c82c4ee52dcde98ce9ceb143c1b"
+      url "https://github.com/insanai/guidedog/releases/download/v1.0.0-beta.16/guidedog-linux-amd64.tar.gz"
+      sha256 "c41685e1aa74886180fc681d81f2ac890a2ca103d97dab43ee1577f803efc798"
     end
   end
 
